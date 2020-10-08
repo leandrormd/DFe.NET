@@ -32,6 +32,7 @@
 /********************************************************************************/
 
 using System;
+using DFe.Classes.Entidades;
 using MDFe.Classes.Extencoes;
 using MDFe.Classes.Informacoes.Evento;
 using MDFe.Classes.Informacoes.Evento.Flags;
@@ -70,6 +71,42 @@ namespace MDFe.Servicos.EventosMDFe
             if (cpfEmitente != null)
             {
                 eventoMDFe.InfEvento.CPF = cpfEmitente;
+            }
+
+            eventoMDFe.Assinar();
+
+            return eventoMDFe;
+        }
+
+        public static MDFeEventoMDFe CriaEvento(Estado UFEmitente, string ChaveAcesso, string CPFCNPJEmitente, MDFeTipoEvento tipoEvento, byte sequenciaEvento, MDFeEventoContainer evento)
+        {
+            var eventoMDFe = new MDFeEventoMDFe
+            {
+                Versao = MDFeConfiguracao.VersaoWebService.VersaoLayout,
+                InfEvento = new MDFeInfEvento
+                {
+                    Id = "ID" + (long)tipoEvento + ChaveAcesso + sequenciaEvento.ToString("D2"),
+                    TpAmb = MDFeConfiguracao.VersaoWebService.TipoAmbiente,
+                    COrgao = UFEmitente,
+                    ChMDFe = ChaveAcesso,
+                    DetEvento = new MDFeDetEvento
+                    {
+                        VersaoServico = MDFeConfiguracao.VersaoWebService.VersaoLayout,
+                        EventoContainer = evento
+                    },
+                    DhEvento = DateTime.Now,
+                    NSeqEvento = sequenciaEvento,
+                    TpEvento = tipoEvento
+                }
+            };
+
+            if (CPFCNPJEmitente.Length > 11)
+            {
+                eventoMDFe.InfEvento.CNPJ = CPFCNPJEmitente;
+            }
+            else
+            {
+                eventoMDFe.InfEvento.CPF = CPFCNPJEmitente;
             }
 
             eventoMDFe.Assinar();

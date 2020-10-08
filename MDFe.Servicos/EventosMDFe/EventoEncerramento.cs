@@ -59,5 +59,14 @@ namespace MDFe.Servicos.EventosMDFe
 
             return retorno;
         }
+
+        public MDFeRetEventoMDFe MDFeEventoEncerramento(Estado UFEmitente, string ChaveAcesso, string CPFCNPJEmitente, Estado estadoEncerramento, long codigoMunicipioEncerramento, byte sequenciaEvento, string protocolo)
+        {
+            var encerramento = ClassesFactory.CriaEvEncMDFe(estadoEncerramento, codigoMunicipioEncerramento, protocolo);
+
+            var retorno = new ServicoController().Executar(UFEmitente, ChaveAcesso, CPFCNPJEmitente, sequenciaEvento, encerramento, MDFeTipoEvento.Encerramento);
+
+            return retorno;
+        }
     }
 }
